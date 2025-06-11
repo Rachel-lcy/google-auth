@@ -1,7 +1,12 @@
 // npm passport and passport-google-oauth20
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import { Users } from "../dbManager.js";
+import Users  from "../dbManager.js";
+import { config } from "dotenv";
+
+config()
+
+
 
 passport.use(new GoogleStrategy({
   clientID:process.env.GOOGLE_CLIENT_ID,

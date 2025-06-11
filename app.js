@@ -6,6 +6,8 @@ import session from 'express-session'
 import helmet from 'helmet'
 import { config } from 'dotenv'
 import http from 'http'
+import passport from './auth/passport.js'
+import router from './authRoutes.js'
 
 //load environment variables from .env file by calling config function
 config()
@@ -17,8 +19,9 @@ config()
 // const helmet = require('helmet')
 
 const app = express()
+app.use(helmet())
 
-// adding session configuration using express-session
+// Adding session configuration using express-session
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave:false,
@@ -26,13 +29,24 @@ app.use(session({
   cookie: {secure: false}
 }))
 
+//Adding passport as middleware in express app
+app.use(passport.initialize())
+app.use(passport.session())
+
+// Adding authentication routes to the express app
+app.use(router)
+
 app.get('/', (req, res) => {
   res.send('<h1>Welcome to my GoogleOAuth Lab</h1>')
 })
 
-
-
-
+app.get('/dashboard', (req, res) => {
+  if(req.isAuthenticated()) {
+    res.send("<h1> User is authenticated, Yayyy!! </h1>")
+  } else{
+    res.redirect('/')
+  }
+})
 http.createServer(app).listen(3000, ()=> {
   console.log('Server started at port 3000')
 })

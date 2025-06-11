@@ -2,4 +2,6 @@
 // For this lab we are simply going to use an array of user
 // You can implement the code to sava data into mongoDB
 
-export const Users = [];
+const Users = [];
+
+export default Users
